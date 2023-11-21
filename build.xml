@@ -1,14 +1,20 @@
 <project name="AntTest" basedir="." default="main">
 
-    <property name="src.dir"     value="src"/>
+    <property name="src.dir" value="src"/>
 
-    <property name="build.dir"   value="target"/>
+    <property name="build.dir" value="target"/>
     <property name="classes.dir" value="${build.dir}/classes"/>
-    <property name="jar.dir"     value="${build.dir}/jar"/>
+    <property name="jar.dir" value="${build.dir}/jar"/>
 
-    <property name="main-class"  value="net.codingdemon.Main"/>
+    <property name="main-class" value="net.codingdemon.Main"/>
 
+    <property name="lib.dir" value="lib"/>
 
+    <path id="classpath">
+        <fileset dir="${lib.dir}" includes="**/*.jar"/>
+    </path>
+
+    <echo message="classpath: ${toString:classpath}"/>
 
     <target name="clean">
         <delete dir="${build.dir}"/>
@@ -16,8 +22,24 @@
 
     <target name="compile">
         <mkdir dir="${classes.dir}"/>
-        <javac srcdir="${src.dir}" destdir="${classes.dir}" includeantruntime="false"/>
+        <javac srcdir="${src.dir}" destdir="${classes.dir}" includeantruntime="false" classpathref="classpath"/>
     </target>
+
+    <target name="get-deps"
+            description="Download all dependencies">
+        <mkdir dir="${lib.dir}"/>
+        <mkdir dir="${lib.dir}/log4j/log4j-api/2.21.1"/>
+        <mkdir dir="${lib.dir}/log4j/log4j-core/2.21.1"/>
+        <get src="https://repo1.maven.org/maven2/org/apache/logging/log4j/log4j-api/2.21.1/log4j-api-2.21.1.jar"
+             dest="${lib.dir}/log4j/log4j-api/2.21.1/log4j-api-2.21.1.jar"
+             usetimestamp="false"
+             ignoreerrors="true"/>
+        <get src="https://repo1.maven.org/maven2/org/apache/logging/log4j/log4j-core/2.21.1/log4j-core-2.21.1.jar"
+             dest="${lib.dir}/log4j/log4j-core/2.21.1/log4j-core-2.21.1.jar"
+             usetimestamp="false"
+             ignoreerrors="true"/>
+    </target>
+
 
     <target name="jar" depends="compile">
         <mkdir dir="${jar.dir}"/>
@@ -29,7 +51,12 @@
     </target>
 
     <target name="run" depends="jar">
-        <java jar="${jar.dir}/${ant.project.name}.jar" fork="true"/>
+        <java fork="true" classname="${main-class}">
+            <classpath>
+                <path refid="classpath"/>
+                <path location="${jar.dir}/${ant.project.name}.jar"/>
+            </classpath>
+        </java>
     </target>
 
     <target name="clean-build" depends="clean,jar"/>
