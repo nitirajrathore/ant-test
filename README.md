@@ -8,6 +8,10 @@ https://stackoverflow.com/questions/14057439/how-can-i-see-the-full-command-ant-
 
 /Users/nitirar/.sdkman/candidates/java/17.0.4-oracle/bin/java -classpath /Users/nitirar/mywork/ant/ant-test/lib/log4j/log4j-core/2.21.1/log4j-core-2.21.1.jar;/Users/nitirar/mywork/ant/ant-test/lib/log4j/log4j-api/2.21.1/log4j-api-2.21.1.jar;/Users/nitirar/mywork/ant/ant-test/target/jar/AntTest.jar -jar /Users/nitirar/mywork/ant/ant-test/target/jar/AntTest.jar
 
+
+2. How to conditionally give arguments in ant
+   https://stackoverflow.com/questions/37424724/how-does-one-use-ant-to-accept-optional-command-line-arguments
+
 ## IntelliJ idea hacks
 
 
