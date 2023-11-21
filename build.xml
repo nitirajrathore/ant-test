@@ -1,21 +1,71 @@
 <project name="AntTest" basedir="." default="main">
 
     <property name="src.dir" value="src/main/java"/>
-    <property name="resource.dir" value="src/main/resources"/>
+    <property name="test.src.dir" value="src/test/java"/>
+    <property name="src.resource.dir" value="src/main/resources"/>
+    <property name="test.resource.dir" value="src/test/resources"/>
 
     <property name="build.dir" value="target"/>
     <property name="classes.dir" value="${build.dir}/classes"/>
+    <property name="build.resource.dir" value="{build.dir/resources"/>
     <property name="jar.dir" value="${build.dir}/jar"/>
+
+    <property name="test.classes.dir" value="${build.dir}/test-classes"/>
+    <property name="build.test.resource.dir" value="{build.dir}/test-resources"/>
+    <property name="test.jar.dir" value="${build.dir}/test-jar"/>
 
     <property name="main-class" value="net.codingdemon.Main"/>
 
     <property name="lib.dir" value="lib"/>
+    <property name="test.lib.dir" value="test-lib"/>
 
-    <path id="classpath">
+    <path id="lib.path">
         <fileset dir="${lib.dir}" includes="**/*.jar"/>
     </path>
 
-    <echo message="classpath: ${toString:classpath}"/>
+    <path id="app.classpath">
+        <dirset dir="${classes.dir}">
+        </dirset>
+    </path>
+
+    <path id="app.resourcepath">
+        <dirset dir="${build.resource.dir}">
+        </dirset>
+    </path>
+
+    <path id="test.resourcepath">
+        <dirset dir="${build.test.resource.dir}">
+        </dirset>
+    </path>
+
+    <path id="app.path">
+        <path refid="lib.path" />
+        <path refid="app.classpath" />
+        <path refid="app.resourcepath" />
+    </path>
+
+    <path id="test.path">
+        <path refid="test.classpath" />
+        <path refid="test.resourcepath" />
+    </path>
+
+    <path id="build.test.classpath">
+        <path refid="lib.path"/>
+        <fileset dir="${test.lib.dir}" includes="**/*.jar"/>
+        <path refid="app.classpath"/>
+    </path>
+
+    <path id="test.classpath">
+        <path refid="build.test.classpath"/>
+        <path>
+            <dirset dir="${test.classes.dir}">
+            </dirset>
+        </path>
+    </path>
+
+    <echo message="classpath: ${toString:lib.path}"/>
+<!--    <echo message="test.classpath: ${toString:test.classpath}"/>-->
+<!--    <echo message="app.test.classpath: ${toString:app.test.classpath}"/>-->
 
     <target name="clean">
         <delete dir="${build.dir}"/>
@@ -23,23 +73,41 @@
 
     <target name="compile">
         <mkdir dir="${classes.dir}"/>
-        <javac srcdir="${src.dir}" destdir="${classes.dir}" includeantruntime="false" classpathref="classpath"/>
-        <copy todir="${classes.dir}">
-            <fileset dir="${resource.dir}" excludes="**/*.java"/>
+        <javac srcdir="${src.dir}" destdir="${classes.dir}" includeantruntime="false" classpathref="lib.path"/>
+        <copy todir="${build.resource.dir}">
+            <fileset dir="${src.resource.dir}" excludes="**/*.java"/>
+        </copy>
+    </target>
+
+    <target name="compile-test" depends="compile">
+        <mkdir dir="${test.classes.dir}"/>
+        <javac srcdir="${test.src.dir}" destdir="${test.classes.dir}" includeantruntime="false"
+               classpathref="test.classpath"/>
+        <copy todir="${build.test.resource.dir}">
+            <fileset dir="${test.resource.dir}" excludes="**/*.java"/>
         </copy>
     </target>
 
     <target name="get-deps"
             description="Download all dependencies">
         <mkdir dir="${lib.dir}"/>
+        <mkdir dir="${test.lib.dir}"/>
+
         <mkdir dir="${lib.dir}/log4j/log4j-api/2.21.1"/>
-        <mkdir dir="${lib.dir}/log4j/log4j-core/2.21.1"/>
         <get src="https://repo1.maven.org/maven2/org/apache/logging/log4j/log4j-api/2.21.1/log4j-api-2.21.1.jar"
              dest="${lib.dir}/log4j/log4j-api/2.21.1/log4j-api-2.21.1.jar"
              usetimestamp="false"
              ignoreerrors="true"/>
+
+        <mkdir dir="${lib.dir}/log4j/log4j-core/2.21.1"/>
         <get src="https://repo1.maven.org/maven2/org/apache/logging/log4j/log4j-core/2.21.1/log4j-core-2.21.1.jar"
              dest="${lib.dir}/log4j/log4j-core/2.21.1/log4j-core-2.21.1.jar"
+             usetimestamp="false"
+             ignoreerrors="true"/>
+
+        <mkdir dir="${test.lib.dir}/junit/junit/4.8"/>
+        <get src="https://repo.maven.apache.org/maven2/junit/junit/4.8/junit-4.8.jar"
+             dest="${test.lib.dir}/junit/junit/4.8/junit-4.8.jar"
              usetimestamp="false"
              ignoreerrors="true"/>
     </target>
@@ -54,11 +122,10 @@
         </jar>
     </target>
 
-    <target name="run" depends="jar">
+    <target name="run" depends="compile">
         <java fork="true" classname="${main-class}">
             <classpath>
-                <path refid="classpath"/>
-                <path location="${jar.dir}/${ant.project.name}.jar"/>
+                <path refid="app.path"/>
             </classpath>
         </java>
     </target>
@@ -66,5 +133,17 @@
     <target name="clean-build" depends="clean,jar"/>
 
     <target name="main" depends="clean,run"/>
+
+    <target name="test" depends="compile-test">
+        <junit>
+            <classpath refid="test.path" />
+            <batchtest>
+                <fileset dir="${test.classes.dir}">
+                    <include name="**/*Test*"/>
+                </fileset>
+            </batchtest>
+            <formatter type="brief" usefile="false"/>
+        </junit>
+    </target>
 
 </project>
