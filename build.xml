@@ -89,6 +89,9 @@
         </copy>
     </target>
 
+
+
+
     <target name="get-deps"
             description="Download all dependencies">
         <mkdir dir="${lib.dir}"/>
@@ -146,6 +149,22 @@
                 </fileset>
             </batchtest>
             <formatter type="brief" usefile="false"/>
+        </junit>
+    </target>
+
+    <target name="test-single" depends="compile-test">
+        <junit>
+            <classpath refid="test.path" />
+            <test name="${test.class}" />
+            <formatter type="plain" usefile="false"/>
+        </junit>
+    </target>
+
+    <target name="test-methods" depends="compile-test">
+        <junit>
+            <classpath refid="test.path" />
+            <test name="${test.class}" methods="${test.methods}"/>
+            <formatter type="plain" usefile="false"/>
         </junit>
     </target>
 

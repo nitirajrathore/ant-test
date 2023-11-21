@@ -12,6 +12,12 @@ https://stackoverflow.com/questions/14057439/how-can-i-see-the-full-command-ant-
 2. How to conditionally give arguments in ant
    https://stackoverflow.com/questions/37424724/how-does-one-use-ant-to-accept-optional-command-line-arguments
 
+3. formatter for junit task
+   https://stackoverflow.com/questions/2791788/junit-ant-task-output-stack-trace
+
+4. Create separate targets for single test class and method : https://stackoverflow.com/questions/39623377/how-to-run-a-single-junit-test-from-an-ant-project-created-by-netbeans-from-the
+
+
 ## IntelliJ idea hacks
 
 
