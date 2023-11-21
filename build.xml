@@ -1,0 +1,27 @@
+<!--Example first ant project https://ant.apache.org/manual/index.html-->
+
+<project>
+
+    <target name="clean">
+        <delete dir="target"/>
+    </target>
+
+    <target name="compile">
+        <mkdir dir="target/classes"/>
+        <javac srcdir="src" destdir="target/classes"/>
+    </target>
+
+    <target name="jar">
+        <mkdir dir="target/jar"/>
+        <jar destfile="target/jar/HelloWorld.jar" basedir="target/classes">
+            <manifest>
+                <attribute name="Main-Class" value="net.codingdemon.Main"/>
+            </manifest>
+        </jar>
+    </target>
+
+    <target name="run">
+        <java jar="target/jar/HelloWorld.jar" fork="true"/>
+    </target>
+
+</project>
