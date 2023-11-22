@@ -18,10 +18,11 @@
     <property name="main.class" value="net.codingdemon.Main"/>
 
     <property name="lib.dir" value="lib"/>
-    <property name="test.lib.dir" value="lib"/>
+    <property name="main.lib.dir" value="lib/main"/>
+    <property name="test.lib.dir" value="lib/test"/>
 
     <path id="lib.path">
-        <fileset dir="${lib.dir}" includes="**/*.jar"/>
+        <fileset dir="${main.lib.dir}" includes="**/*.jar"/>
     </path>
 
     <path id="app.classpath">
@@ -123,8 +124,8 @@
         </copy>
     </target>
 
-    <target name="resolve" description="--> retrieve dependencies with Ivy">
-        <ivy:retrieve />
+    <target name="resolve" description="retrieve dependencies with Ivy">
+        <ivy:retrieve  pattern="${lib.dir}/[conf]/[organisation]/[artifact]-[revision].[ext]" sync="true"/>
     </target>
 
     <target name="get-deps"
