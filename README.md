@@ -17,6 +17,8 @@ https://stackoverflow.com/questions/14057439/how-can-i-see-the-full-command-ant-
 
 4. Create separate targets for single test class and method : https://stackoverflow.com/questions/39623377/how-to-run-a-single-junit-test-from-an-ant-project-created-by-netbeans-from-the
 
+5. Ivy setup : https://ant.apache.org/ivy/history/latest-milestone/tutorial/start.html
+
 
 ## IntelliJ idea hacks
 
