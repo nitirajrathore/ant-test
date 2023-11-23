@@ -204,4 +204,10 @@
         </junit>
     </target>
 
+    <target name="runpy">
+        <exec executable="python" logError="true"  vmlauncher="false">
+            <arg value="${script.path}"/>
+            <arg line="${args}"/>
+        </exec>
+    </target>
 </project>
