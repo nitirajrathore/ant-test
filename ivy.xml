@@ -3,13 +3,15 @@
 
     <configurations defaultconfmapping="main->default">
         <conf name="main" description="Required to compile code"/>
-        <conf name="test" visibility="private" description="Additional test dependencies" />
+        <conf name="test" visibility="private" description="Additional test dependencies"/>
+        <conf name="python" description="Additional python dependencies"/>
     </configurations>
 
     <dependencies>
-        <dependency org="org.apache.logging.log4j" name="log4j-core" rev="2.21.1" conf="main"/>
-        <dependency org="org.apache.logging.log4j" name="log4j-api" rev="2.21.1" conf="main"/>
+        <dependency org="org.apache.logging.log4j" name="log4j-core" rev="2.21.1" conf="main->default"/>
+        <dependency org="org.apache.logging.log4j" name="log4j-api" rev="2.21.1" conf="main->default"/>
         <dependency org="junit" name="junit" rev="4.13.1" conf="test->default"/>
+        <dependency org="net.sf.ant-python" name="ant-python" rev="0.1.6" conf="python->runtime"/>
     </dependencies>
 </ivy-module>
 

@@ -20,6 +20,7 @@
     <property name="lib.dir" value="lib"/>
     <property name="main.lib.dir" value="lib/main"/>
     <property name="test.lib.dir" value="lib/test"/>
+    <property name="python.lib.dir" value="lib/python"/>
 
     <path id="lib.path">
         <fileset dir="${main.lib.dir}" includes="**/*.jar"/>
@@ -125,7 +126,7 @@
     </target>
 
     <target name="resolve" description="retrieve dependencies with Ivy">
-        <ivy:retrieve  pattern="${lib.dir}/[conf]/[organisation]/[artifact]-[revision].[ext]" sync="true"/>
+        <ivy:retrieve  pattern="${lib.dir}/[conf]/[organisation]/[artifact]-[revision](-[type]).[ext]" sync="true"/>
     </target>
 
     <target name="get-deps"
@@ -210,4 +211,26 @@
             <arg line="${args}"/>
         </exec>
     </target>
+
+    <taskdef name="setup" classname="net.sf.antpython.task.Setup" classpath="${python.lib.dir}"/>
+
+    <target name="setuppy">
+        <setup name="toolspy" dir="."
+                manifest="true"
+                version="1.0"
+                url="http://foobar.com"
+                author="John Doe"
+                authorEmail="john@foobar.com"
+                shortDescription="Test package"
+                longDescription="Example for the ant task setup"
+                license="GPL">
+            <classifier name="Development Status :: 4 - Beta" />
+            <classifier name="Programming Language :: Python" />
+
+            <require name="numpy" op=">=" version="1.6" />
+        </setup>
+    </target>
+
+
+
 </project>

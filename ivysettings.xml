@@ -1,0 +1,20 @@
+<ivysettings>
+    <settings defaultResolver="default" />
+    <include url="${ivy.default.settings.dir}/ivysettings-public.xml" />
+    <include url="${ivy.default.settings.dir}/ivysettings-shared.xml" />
+    <include url="${ivy.default.settings.dir}/ivysettings-local.xml" />
+
+    <resolvers>
+        <chain name="default" returnFirst="true">
+            <resolver ref="local" />
+            <resolver ref="shared" />
+            <resolver ref="public" />
+
+            <!-- Resolver for ant-python -->
+            <url name="ant-python">
+                <ivy pattern="https://ant-python.sourceforge.net/ivy/[revision]/ivy.xml" />
+                <artifact pattern="https://ant-python.sourceforge.net/ivy/[revision]/[artifact](-[type]).[ext]" />
+            </url>
+        </chain>
+    </resolvers>
+</ivysettings>
